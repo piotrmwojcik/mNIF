@@ -425,7 +425,7 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
             if pred_type == 'image':
                 pred_imgs = model_output['model_out'].view(-1, opt.resolution, opt.resolution, 3).permute(0, 3, 1, 2) * 0.5 + 0.5
                 gt_imgs = gt['img'].view(-1, opt.resolution, opt.resolution, 3).permute(0, 3, 1, 2) * 0.5 + 0.5
-                if total_steps == 0:
+                if total_steps % 1500 == 0:
                     grid_samples = torchvision.utils.make_grid(pred_imgs, nrow=int(math.sqrt(pred_imgs.size(0))))
                     torchvision.utils.save_image(grid_samples, os.path.join(opt.checkpoint_path, f'samples{opt.split}.png'))            
                     grid_gts = torchvision.utils.make_grid(gt_imgs, nrow=int(math.sqrt(gt_imgs.size(0))))

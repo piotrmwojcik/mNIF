@@ -554,6 +554,11 @@ class ShapeNet(DataLoader):
         points = (self.data_points_int[idx].float() + 1) / 128 - 1
         occs = self.data_values[idx].float() * 2 -1
 
+        print('!!!')
+        print(points.shape)
+        print(self.sampling)
+        print(self.random_scale)
+
         if self.sampling is not None:
             idcs = np.random.randint(0, len(points), size=self.sampling)
             points = points[idcs]

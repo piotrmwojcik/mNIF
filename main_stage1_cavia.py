@@ -346,6 +346,7 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
             gt = {key: value.cuda() for key, value in gt.items()}
 
             batch_size = gt['img'].size(0)
+            print('!!! ', batch_size)
             if opt.double_precision:
                 model_input = {key: value.double() for key, value in model_input.items()}
                 gt = {key: value.double() for key, value in gt.items()}

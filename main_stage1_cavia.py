@@ -346,7 +346,6 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
             gt = {key: value.cuda() for key, value in gt.items()}
 
             batch_size = gt['img'].size(0)
-            print('!!! ', batch_size)
             if opt.double_precision:
                 model_input = {key: value.double() for key, value in model_input.items()}
                 gt = {key: value.double() for key, value in gt.items()}
@@ -360,6 +359,7 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
 
             if opt.use_meta_sgd:
                 meta_sgd_inner = model.meta_sgd_lrs()
+            start_time = time.time()
             for inner_step in range(opt.num_inner):
                 if pred_type == 'scene' and opt.repeat_sampling and inner_step > 0:
                     model_input, gt = get_samples_for_nerf(copy.deepcopy(model_input_batch), copy.deepcopy(gt_batch), opt)
@@ -385,7 +385,7 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
                     context_params = context_params - opt.lr_inner * (meta_sgd_inner * grad_inner)
                 else:
                     context_params = context_params - opt.lr_inner * grad_inner
-
+            print('Inner step took:', time.time() - start_time)
             model_output = model(model_input, context_params)
             
             if pred_type == 'scene': # volume rendering

@@ -328,9 +328,9 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
 
     list_context_params, gen_acts = [], []
     for epoch in range(opt.num_epochs):
+        start_time = time.time()
         all_losses, all_psnr, all_acc, steps = 0.0, 0.0, 0.0, 0
         for step, (model_input_batch, gt_batch) in enumerate(dataloader):
-            start_time = time.time()
             if pred_type == 'scene' and epoch % opt.epoch_for_full_rendering == 0 and step == 0:
                 model_input_eval, gt_eval = get_samples_for_nerf(copy.deepcopy(model_input_batch), copy.deepcopy(gt_batch), opt, view_num=1, pixel_sampling=False)
             
@@ -385,7 +385,6 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
                     context_params = context_params - opt.lr_inner * (meta_sgd_inner * grad_inner)
                 else:
                     context_params = context_params - opt.lr_inner * grad_inner
-            print('Inner step took:', time.time() - start_time)
             model_output = model(model_input, context_params)
             
             if pred_type == 'scene': # volume rendering
@@ -557,3 +556,5 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
                 f.write(f'Dataset: {opt.dataset} Split: {opt.split}')
                 print(opt, file=f)
                 f.write(description + '\n')
+
+    print('Epoch step took:', time.time() - start_time)

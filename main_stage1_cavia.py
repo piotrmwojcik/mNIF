@@ -328,6 +328,7 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
 
     list_context_params, gen_acts = [], []
     for epoch in range(opt.num_epochs):
+        print('starting epoch ', epoch)
         start_time = time.time()
         all_losses, all_psnr, all_acc, steps = 0.0, 0.0, 0.0, 0
         for step, (model_input_batch, gt_batch) in enumerate(dataloader):
@@ -557,4 +558,4 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
                 print(opt, file=f)
                 f.write(description + '\n')
 
-    print('Epoch step took:', time.time() - start_time)
+        print('Epoch step took:', time.time() - start_time)

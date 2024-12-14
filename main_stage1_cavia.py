@@ -360,7 +360,6 @@ with tqdm(total=len(dataloader) * opt.num_epochs) as pbar:
 
             if opt.use_meta_sgd:
                 meta_sgd_inner = model.meta_sgd_lrs()
-            start_time = time.time()
             for inner_step in range(opt.num_inner):
                 if pred_type == 'scene' and opt.repeat_sampling and inner_step > 0:
                     model_input, gt = get_samples_for_nerf(copy.deepcopy(model_input_batch), copy.deepcopy(gt_batch), opt)
